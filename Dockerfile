@@ -16,7 +16,7 @@ RUN echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set
 
 
 # Install packages
-RUN apt-get install -y supervisor postgresql postfix postgrey postfix-pcre postfix-pgsql policyd-weight dovecot-common dovecot-core dovecot-gssapi dovecot-imapd dovecot-ldap dovecot-lmtpd dovecot-pgsql dovecot-sieve
+RUN apt-get install -y supervisor postgresql postfix postgrey postfix-pcre postfix-pgsql policyd-weight dovecot-common dovecot-core dovecot-gssapi dovecot-imapd dovecot-ldap dovecot-lmtpd dovecot-pgsql dovecot-sieve rsyslog wget
 
 RUN service postgresql stop
 # Allow connections from anywhere.
@@ -81,7 +81,6 @@ ADD postgresql/postgresql.conf /etc/postgresql/9.1/main/postgresql.conf
 RUN chown -R postgres:postgres /etc/postgresql
 RUN chmod -R 700 /etc/postgresql
 
-RUN apt-get install -y rsyslog wget
 RUN service rsyslog stop
 ADD rsyslog/rsyslog.conf /etc/rsyslog.conf
 

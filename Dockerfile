@@ -20,7 +20,7 @@ RUN apt-get install -y supervisor postgresql postfix postgrey postfix-pcre postf
 # Allow local connections to postgresql db.
 #RUN sed -i -e "s/^#listen_addresses =.*$/listen_addresses = '*'/" /etc/postgresql/9.1/main/postgresql.conf
 #RUN echo "host    all    all    0.0.0.0/0    md5" >> /etc/postgresql/9.1/main/pg_hba.conf
-RUN service postgresql reload
+#RUN service postgresql reload
 
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Copy postfix configuration

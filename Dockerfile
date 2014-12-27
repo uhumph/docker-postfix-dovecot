@@ -8,20 +8,19 @@ RUN useradd -d /var/mail/vmail -M -N --gid 10000 --uid 10000 vmail
 RUN chown -R vmail:vmail /var/mail/vmail
 
 
-RUN apt-get update -y
-
 # Allow postfix to install without interaction.
 RUN echo "postfix postfix/mailname string example.com" | debconf-set-selections
 RUN echo "postfix postfix/main_mailer_type string 'Internet Site'" | debconf-set-selections
 
 
 # Install packages
+RUN apt-get update -y
 RUN apt-get install -y supervisor postgresql postfix postgrey postfix-pcre postfix-pgsql policyd-weight dovecot-common dovecot-core dovecot-gssapi dovecot-imapd dovecot-ldap dovecot-lmtpd dovecot-pgsql dovecot-sieve rsyslog wget
 
-RUN service postgresql stop
-# Allow connections from anywhere.
-RUN sed -i -e"s/^#listen_addresses =.*$/listen_addresses = '*'/" /etc/postgresql/9.1/main/postgresql.conf
-RUN echo "host    all    all    0.0.0.0/0    md5" >> /etc/postgresql/9.1/main/pg_hba.conf
+# Allow local connections to postgresql db.
+#RUN sed -i -e "s/^#listen_addresses =.*$/listen_addresses = '*'/" /etc/postgresql/9.1/main/postgresql.conf
+#RUN echo "host    all    all    0.0.0.0/0    md5" >> /etc/postgresql/9.1/main/pg_hba.conf
+RUN service postgresql reload
 
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 # Copy postfix configuration
